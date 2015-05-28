@@ -1,33 +1,41 @@
 #!/bin/sh
 
-validint(){
-	number=$1	min=$2	max=$3
-	
-	if [ $number -gt $min ]; then
-			echo "Integer $number must be less than $min"
-			exit 1
-	elif [ $max -lt $min ]; then
-			echo "Integer $max must be greater than $min"
-			exit 1
-	else
-			return 0
+validint()
+{
+	number="$1"		min="$2" max="$3"
+	if [ -z "$number" ]; then
+		echo "Nothing entered.Unacceptable" >&2
+		exit 1
 	fi
-	
-	if [ $number  -gt 100 -o $min -gt 100 -o $max -gt 100 ]; then
-			echo "Integer must not exceed 100"
-			exit 1
-	elif [ $number -lt 0 -o $min -lt 0 -o $max -lt 0];then
-			echo "Integer must be greater than 0"
-			exit 1
+
+	if [ "${number%${number#?}}" = "-" ]; then
+		testVal="${number#?}"
 	else
-			return 0
+		testVal="$number"
 	fi
+
+	nodigits=$(echo testVal | sed 's/[[:digit:]]//g')
+	if [ ! -z "$nodigits" ]; then
+		echo "This is not a valid integer" >&2 
+		exit 1
+	fi
+
+	if [ ! -z $min ]; then
+		if [ "$number" -lt "$min" ]; then
+			echo "Your value is too small: smallest acceptable value is $min" >&2
+			exit 1
+		fi
+	fi
+
+	if [ ! -z $max ]; then
+		if [ "$number" -gt "$max" ]; then
+			echo "Your value is too big: largest acceptable value is $max" >&2
+			exit 1
+		fi
+	fi
+return 0
 }
 
-if [ $# -ne 4 ]; then
-	echo "Usage: $0 int1 int2 int3"; exit 1;
-fi
-
-if validint "$1 $2 $3"; then
-	echo "That input is a valid integer value within your constraints"
+if validint "$1" "$2" "$3"; then
+	echo "That input is a valid integer value within your constaints"
 fi
