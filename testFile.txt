@@ -1,0 +1,8 @@
+The script itself revolves around the getfix function, which shows each errr in
+its context and then prompts the user for either a correction or permission to
+ignore each error. The sophisticated conditionals in this script allow users to
+typ in iether a correction for the reported misspelling, i to ignore the
+misspelling, or q to immediately quit the program. Perhaps more interesting is that getfix is
+intearctive. It checks the spelling of the corrections that are entered to
+ensure that you’re not trading one misspelling for another. If the script thinks that
+the correction is a misspellng too, you can force acceptance of the correction by
